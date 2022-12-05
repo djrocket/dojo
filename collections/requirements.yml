@@ -1,6 +1,6 @@
 ---
 collections:
-- Ansible.Netcommon
+- ansible.netcommon
 - arista.eos
 - ansible.utils
 

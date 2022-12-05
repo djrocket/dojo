@@ -1,4 +1,5 @@
 ansible-core
 ntc-templates
 ansible-pylibssh
+yamllint
 
