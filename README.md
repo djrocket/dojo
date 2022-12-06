@@ -1,2 +1,2 @@
 # dojo
-Lab 1 configuration files.  Lab assignmend complete.
+Lab 1 configuration files.  Lab assignment complete.
