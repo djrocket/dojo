@@ -13,4 +13,12 @@ interfaces:
     desc: "Loopback0 - Update Source"
     enabled: true
     ipv4: 172.200.210.13/32
- 
+bgp:
+  local_as: 65002
+  neighbors:
+    ipv4_neighbors:
+     - neighbor: 192.168.1.2
+       remote_as: 65100
+       update_source: Loopback0
+       prefix: '172.200.210.13'
+       masklen: 32

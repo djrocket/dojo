@@ -33,5 +33,48 @@
       when: item.routed is defined  
       loop: "{{ interfaces }}"
 
+    - name: Configure non-routed Loopbacks
+      become: true
+      arista.eos.interfaces:
+        config:
+        - name: "{{ item.eos_if }}"
+        state: merged
+      when: item.routed is not defined  
+      loop: "{{ interfaces }}"
+      tags: ["l0"]
 
- 
+    - name: Configure L3 IPv4 Interfaces
+      become: true
+      arista.eos.l3_interfaces:
+        config:
+        - name: "{{ item.eos_if }}"
+          ipv4:
+          - address: "{{ item.ipv4 }}"
+        state: merged
+      loop: "{{ interfaces }}"
+      tags: ["l3 int"]
+
+    - name: Enable IPv4 routing
+      become: true
+      eos_config:
+        lines:
+          - "ip routing"
+      tags: ["routing"]
+
+    - name: Configure AS attributes and neighbor
+      become: true
+      arista.eos.eos_bgp:
+        config:
+          bgp_as: "{{ bgp.local_as }}"
+          log_neighbor_changes: True
+          router_id: "{{ router_id }}"
+          neighbors:
+          - neighbor: "{{ bgp.neighbors.ipv4_neighbors[0].neighbor }}"
+            remote_as: "{{ bgp.neighbors.ipv4_neighbors[0].remote_as }}"
+            update_source: "{{ bgp.neighbors.ipv4_neighbors[0].update_source }}"
+          networks:
+          - prefix: "{{ bgp.neighbors.ipv4_neighbors[0].prefix }}"
+            masklen: "{{ bgp.neighbors.ipv4_neighbors[0].masklen }}"
+      tags: ["bgp"]
+      
+       
