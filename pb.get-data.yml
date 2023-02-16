@@ -12,10 +12,6 @@
       ansible.builtin.debug:
         var: 'ping'
 
-    - name: 'ANNOY PAUL'
-      ansible.builtin.debug:
-        msg: "I like you"
-
     - name: 'SHOW VERSION'
       ansible.utils.cli_parse:
         command: 'show version'
@@ -34,6 +30,7 @@
         - name: "{{ item.eos_if }}"
           mode: layer3
         state: merged
+      when: item.routed is defined  
       loop: "{{ interfaces }}"
 
 
