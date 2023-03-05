@@ -2,7 +2,6 @@
 hostname: clab-lab-01-ceos2
 ansible_network_os: "arista.eos.eos"
 domain_name: ceos2.local
-router_id: 172.200.210.13
 interfaces:
   - eos_if: "Ethernet1/1"
     desc: "Ethernet1/1 - Srl to ceos2 peering intf"
@@ -12,13 +11,13 @@ interfaces:
   - eos_if: "Loopback0"
     desc: "Loopback0 - Update Source"
     enabled: true
-    ipv4: 172.200.210.13/32
+    ipv4: 10.10.10.11/32
 bgp:
+  router_id: 172.200.210.13
   local_as: 65002
   neighbors:
     ipv4_neighbors:
-     - neighbor: 192.168.1.2
-       remote_as: 65100
-       update_source: Loopback0
-       prefix: '172.200.210.13'
-       masklen: 32
+      - peer: 192.168.1.2
+        remote_as: 65100
+        prefix: '10.10.10.11'
+        masklen: 32
