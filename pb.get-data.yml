@@ -59,5 +59,15 @@
         state: merged
       loop: "{{ interfaces }}"
       tags: ["l3 int"]
-      
+
+    - name: "TASK: CREATE CONFIGS DIRECTORY"
+      ansible.builtin.file:
+        path: configs
+        state: directory
+
+    - name: "TASK: GENERATE BGP CONFIGURATION"
+      ansible.builtin.template:
+        src: "templates/eos_bgp.j2"
+        dest: "configs/{{ inventory_hostname }}_eos_bgp.cfg"
+
 

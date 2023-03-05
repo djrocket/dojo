@@ -1,0 +1,39 @@
+
+    - name: Enable IPv4 routing
+      become: true
+      eos_config:
+        lines:
+          - "ip routing"
+      tags: ["routing"]
+
+    - name: Configure AS attributes and neighbor
+      become: true
+      arista.eos.eos_bgp:
+        config:
+          bgp_as: "{{ bgp.local_as }}"
+          log_neighbor_changes: True
+          router_id: "{{ bgp.router_id }}"
+          neighbors:
+          - neighbor: "{{ bgp.neighbors.ipv4_neighbors[0].neighbor }}"
+            remote_as: "{{ bgp.neighbors.ipv4_neighbors[0].remote_as }}"
+          networks:
+          - prefix: "{{ bgp.neighbors.ipv4_neighbors[0].prefix }}"
+            masklen: "{{ bgp.neighbors.ipv4_neighbors[0].masklen }}"
+      tags: ["bgp"]
+
+    - name: Configure AS attributes and neighbor
+      become: true
+      arista.eos.eos_bgp:
+        config:
+          bgp_as: "{{ bgp.local_as }}"
+          log_neighbor_changes: True
+          router_id: "{{ bgp.router_id }}"
+          neighbors:
+          - neighbor: "{{ item.neighbor }}"
+            remote_as: "{{ item.remote_as }}"
+          networks:
+          - prefix: "{{ item.prefix }}"
+            masklen: "{{ item.masklen }}"
+      when: bgp is defined
+      loop: "{{ bgp.neighbors.ipv4_neighbors }}" 
+      tags: ["bgp"]
