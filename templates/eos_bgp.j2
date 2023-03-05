@@ -4,6 +4,11 @@ ip routing
 router bgp {{ bgp.local_as }}
     router-id  {{ bgp.router_id }}
     bgp log-neighbor-changes
-    neighbor {{ bgp.neighbors.ipv4_neighbors[0].peer }} remote-as {{ bgp.neighbors.ipv4_neighbors[0].remote_as }}
-    network {{ bgp.neighbors.ipv4_neighbors[0].prefix }}/{{ bgp.neighbors.ipv4_neighbors[0].masklen }}
+    {% for neighbor in bgp.neighbors.ipv4_neighbors -%}
+    neighbor {{ neighbor.peer }} remote-as {{ neighbor.remote_as }}
+    {% for network in neighbor.networks -%}
+    network {{ network }}
+    {% endfor -%}
+    {% endfor -%}
+
 !
