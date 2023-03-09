@@ -29,45 +29,30 @@
         dest: router_version_{{ inventory_hostname }}.txt
       delegate_to: localhost
 
-    - name: Configure routed protocols
-      become: true
-      arista.eos.interfaces:
-        config:
-        - name: "{{ item.eos_if }}"
-          mode: layer3
-        state: merged
-      when: item.routed is defined  
-      loop: "{{ interfaces }}"
-
-    - name: Configure non-routed Loopbacks
-      become: true
-      arista.eos.interfaces:
-        config:
-        - name: "{{ item.eos_if }}"
-        state: merged
-      when: item.routed is not defined  
-      loop: "{{ interfaces }}"
-      tags: ["l0"]
-
-    - name: Configure L3 IPv4 Interfaces
-      become: true
-      arista.eos.l3_interfaces:
-        config:
-        - name: "{{ item.eos_if }}"
-          ipv4:
-          - address: "{{ item.ipv4 }}"
-        state: merged
-      loop: "{{ interfaces }}"
-      tags: ["l3 int"]
-
     - name: "TASK: CREATE CONFIGS DIRECTORY"
       ansible.builtin.file:
         path: configs
         state: directory
 
+    - name: "TASK: GENERATE INTERFACE CONFIGURATION"
+      ansible.builtin.template:
+        src: "templates/eos_int.j2"
+        dest: "configs/{{ inventory_hostname }}_eos_int.cfg"
+  
     - name: "TASK: GENERATE BGP CONFIGURATION"
       ansible.builtin.template:
         src: "templates/eos_bgp.j2"
         dest: "configs/{{ inventory_hostname }}_eos_bgp.cfg"
+
+    - name: "TASK: {{ inventory_hostname | upper }} LOAD BGP CONFIGURATION"
+      become: true
+      arista.eos.eos_config:
+        src: "{{ item }}"
+      register: updates
+      with_items:
+        - configs/{{ inventory_hostname }}_eos_bgp.cfg
+        - configs/{{ inventory_hostname }}_eos_int.cfg
+
+
 
 

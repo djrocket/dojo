@@ -3,7 +3,9 @@ ip routing
 !
 router bgp {{ bgp.local_as }}
     router-id  {{ bgp.router_id }}
-    bgp log-neighbor-changes
+    {% if not bgp['log-neighbor-changes'] -%}
+    no bgp log-neighbor-changes
+    {% endif -%}
     {% for neighbor in bgp.neighbors.ipv4_neighbors -%}
     neighbor {{ neighbor.peer }} remote-as {{ neighbor.remote_as }}
     {% for network in neighbor.networks -%}

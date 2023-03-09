@@ -37,3 +37,79 @@
       when: bgp is defined
       loop: "{{ bgp.neighbors.ipv4_neighbors }}" 
       tags: ["bgp"]
+
+          {% if not bgp.log-neighbor-changes -%}
+    no bgp log-neighbor-changes
+    {% endif -%}
+
+
+        - name: Configure routed protocols
+      become: true
+      arista.eos.interfaces:
+        config:
+        - name: "{{ item.eos_if }}"
+          mode: layer3
+        state: merged
+      when: item.routed is defined  
+      loop: "{{ interfaces }}"
+
+    - name: Configure non-routed Loopbacks
+      become: true
+      arista.eos.interfaces:
+        config:
+        - name: "{{ item.eos_if }}"
+        state: merged
+      when: item.routed is not defined  
+      loop: "{{ interfaces }}"
+      tags: ["l0"]
+
+    - name: Configure L3 IPv4 Interfaces
+      become: true
+      arista.eos.l3_interfaces:
+        config:
+        - name: "{{ item.eos_if }}"
+          ipv4:
+          - address: "{{ item.ipv4 }}"
+        state: merged
+      loop: "{{ interfaces }}"
+      tags: ["l3 int"]
+
+
+
+    - name: Configure routed protocols
+      become: true
+      arista.eos.interfaces:
+        config:
+        - name: "{{ item.eos_if }}"
+          mode: layer3
+        state: merged
+      when: item.routed is defined  
+      loop: "{{ interfaces }}"
+
+    - name: Configure non-routed Loopbacks
+      become: true
+      arista.eos.interfaces:
+        config:
+        - name: "{{ item.eos_if }}"
+        state: merged
+      when: item.routed is not defined  
+      loop: "{{ interfaces }}"
+      tags: ["l0"]
+
+    - name: Configure L3 IPv4 Interfaces
+      become: true
+      arista.eos.l3_interfaces:
+        config:
+        - name: "{{ item.eos_if }}"
+          ipv4:
+          - address: "{{ item.ipv4 }}"
+        state: merged
+      loop: "{{ interfaces }}"
+      tags: ["l3 int"]
+
+description {{ int.desc }}
+
+      {% if "Ethernet" in int.eos_if -%}
+no switchport
+{% endif -%}
+ip address {{ int.ipv4 }}
