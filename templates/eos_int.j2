@@ -1,0 +1,13 @@
+!
+{% for int in interfaces -%}
+interface {{ int.eos_if }}
+  description {{ int.desc }}
+  {% if "Ethernet" in int.eos_if -%}
+  no switchport
+  {% endif -%}
+  ip address {{ int.ipv4 }}
+  no shutdown
+!
+{% endfor -%}
+!
+
