@@ -8,6 +8,8 @@
       ansible.builtin.ping:
       register: 'ping'
 
+    # -name: validate devices are rechable with ping
+    
     - name: 'VIEW OUTPUT OF PING'
       ansible.builtin.debug:
         var: 'ping'

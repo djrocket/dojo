@@ -1,1 +1,1 @@
-{"model": "cEOSLab", "hw_version": "", "serial_number": "9E61BFA5A0C03E2883B135115682A69C", "sys_mac": "001c.7332.740e", "image": "4.28.0F-26924507.4280F", "total_memory": "8058868", "free_memory": "3280420"}
+{"model": "cEOSLab", "hw_version": "", "serial_number": "3ABF57514A21949140ECF37EAE9A67E0", "sys_mac": "001c.73ad.5de5", "image": "4.28.0F-26924507.4280F", "total_memory": "8046564", "free_memory": "3402464"}
