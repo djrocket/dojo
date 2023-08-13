@@ -4,3 +4,5 @@ ansible-pylibssh
 yamllint
 pyyaml>=5.4.1
 ansible-lint
+jmespath
+steampunk-spotter

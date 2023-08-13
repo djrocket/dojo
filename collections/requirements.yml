@@ -3,4 +3,5 @@ collections:
 - ansible.netcommon
 - arista.eos
 - ansible.utils
+- community.general
 
