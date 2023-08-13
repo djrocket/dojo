@@ -26,7 +26,7 @@
         msg: "{{ version_result.parsed[0] | json_query('image') }}"
 
     - name: 'EXTRA TASK: Store version result in a local file'
-      ansible.builtin.copy: 
+      ansible.builtin.copy:
         content: "{{ version_result.parsed[0] }}"
         dest: router_version_{{ inventory_hostname }}.txt
       delegate_to: localhost
@@ -40,7 +40,7 @@
       ansible.builtin.template:
         src: "templates/eos_int.j2"
         dest: "configs/{{ inventory_hostname }}_eos_int.cfg"
-  
+
     - name: "TASK: GENERATE BGP CONFIGURATION"
       ansible.builtin.template:
         src: "templates/eos_bgp.j2"
