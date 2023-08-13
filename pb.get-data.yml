@@ -24,7 +24,7 @@
       ansible.builtin.debug:
       #  msg: "{{ version_result['parsed'][0]['image'] }}"
         msg: "{{ version_result.parsed[0] | json_query('image') }}"
-  
+
     - name: 'EXTRA TASK: Store version result in a local file'
       ansible.builtin.copy: 
         content: "{{ version_result.parsed[0] }}"
